@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe Tournament</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(50, 20px);
+            gap: 2px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .cell {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cell:hover {
+            background-color: lightgray;
+        }
+        .form-container {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 Tournoi Tic-Tac-Toe (50x50) 🏆</h1>
+    <p>💰 Inscription : 25 Gourdes via NatCash</p>
+    <p>🏅 Gagnez 250 Gourdes en terminant 1er !</p>
+
+    <!-- Formulaire d'inscription -->
+    <div class="form-container">
+        <h3>Inscription</h3>
+        <p>Envoyez 25 Gourdes sur **ton numéro NatCash** puis entrez vos infos :</p>
+        <input type="text" id="playerName" placeholder="Votre nom" required>
+        <input type="text" id="playerNumber" placeholder="Numéro NatCash" required>
+        <input type="file" id="paymentProof" accept="image/*" required>
+        <button onclick="registerPlayer()">S'inscrire</button>
+    </div>
+
+    <!-- Grille de jeu -->
+    <div class="game-container" id="gameBoard"></div>
+
+    <script>
+        let currentPlayer = "X";
+        const boardSize = 50;
+        let gameBoard = [];
+
+        function createBoard() {
+            const container = document.getElementById("gameBoard");
+            container.innerHTML = "";
+            gameBoard = Array(boardSize).fill().map(() => Array(boardSize).fill(""));
+
+            for (let i = 0; i < boardSize; i++) {
+                for (let j = 0; j < boardSize; j++) {
+                    let cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.onclick = playMove;
+                    container.appendChild(cell);
+                }
+            }
+        }
+
+        function playMove(event) {
+            let row = event.target.dataset.row;
+            let col = event.target.dataset.col;
+
+            if (gameBoard[row][col] === "") {
+                gameBoard[row][col] = currentPlayer;
+                event.target.textContent = currentPlayer;
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+            }
+        }
+
+        function registerPlayer() {
+            let name = document.getElementById("playerName").value;
+            let number = document.getElementById("playerNumber").value;
+            let proof = document.getElementById("paymentProof").files[0];
+
+            if (!name || !number || !proof) {
+                alert("Veuillez remplir tous les champs et télécharger la preuve de paiement.");
+                return;
+            }
+
+            alert("Inscription réussie ! Vous êtes ajouté au tournoi.");
+        }
+
+        createBoard();
+    </script>
+
+</body>
+</html>
